@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="zh" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>个人简介</title>
+  <style>
+    :root[data-theme="dark"] {
+      --primary: #1a1a1a;
+      --accent: #64ffda;
+      --text: #e6e6e6;
+      --text-secondary: #8892b0;
+      --bg: #0a192f;
+      --card-bg: #112240;
+      --hover: rgba(100, 255, 218, 0.1);
+      --nav-bg: rgba(10, 25, 47, 0.85);
+      --shadow: rgba(2, 12, 27, 0.7);
+    }
+
+    :root[data-theme="light"] {
+      --primary: #ffffff;
+      --accent: #007acc;
+      --text: #333333;
+      --text-secondary: #666666;
+      --bg: #f5f5f5;
+      --card-bg: #ffffff;
+      --hover: rgba(0, 122, 204, 0.1);
+      --nav-bg: rgba(255, 255, 255, 0.85);
+      --shadow: rgba(0, 0, 0, 0.1);
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0px);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+
+      100% {
+        transform: translateY(0px);
+      }
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "SF Pro Display", -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* 导航栏样式 */
+    nav {
+      position: fixed;
+      width: 100%;
+      padding: 1.5rem 0;
+      background: var(--nav-bg);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+      transition: all 0.3s;
+    }
+
+    nav.scrolled {
+      padding: 1rem 0;
+      box-shadow: 0 10px 30px -10px var(--shadow);
+    }
+
+    .nav-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-decoration: none;
+      position: relative;
+    }
+
+    .logo::after {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -4px;
+      left: 0;
+      background-color: var(--accent);
+      transition: width 0.3s;
+    }
+
+    .logo:hover::after {
+      width: 100%;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .nav-link {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s;
+      position: relative;
+      padding: 5px 0;
+    }
+
+    .nav-link::after {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: 0;
+      left: 0;
+      background-color: var(--accent);
+      transition: width 0.3s;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    /* 移动端菜单 */
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.5rem;
+      cursor: pointer;
+      z-index: 101;
+    }
+
+    @media (max-width: 768px) {
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      .nav-links {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        height: 100vh;
+        width: 70%;
+        background: var(--card-bg);
+        flex-direction: column;
+        padding: 6rem 2rem;
+        transition: all 0.3s;
+      }
+
+      .nav-links.active {
+        right: 0;
+      }
+    }
+
+    /* 英雄区域 */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 4rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      position: absolute;
+      top: 20%;
+      left: 1rem;
+      color: rgba(100, 255, 218, 0.1);
+      font-family: monospace;
+      font-size: 1rem;
+    }
+
+    .hero-content {
+      max-width: 800px;
+      animation: fadeIn 1s ease-out;
+    }
+
+    .subtitle {
+      color: var(--accent);
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .subtitle::before {
+      content: "";
+      width: 40px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    .title {
+      font-size: 4.5rem;
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(45deg, var(--text), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .description {
+      color: var(--text-secondary);
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      max-width: 600px;
+    }
+
+    /* 按钮样式 */
+    .cta-button {
+      display: inline-block;
+      padding: 1rem 2rem;
+      border: 2px solid var(--accent);
+      border-radius: 4px;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .cta-button:hover {
+      background: var(--hover);
+      transform: translateY(-3px);
+    }
+
+    /* 节标题 */
+    .section {
+      padding: 6rem 0;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      margin-bottom: 3rem;
+      color: var(--text);
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .section-title::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--text-secondary);
+    }
+
+    /* 技能卡片 */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .skill-card {
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: 8px;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .skill-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg,
+          transparent,
+          rgba(100, 255, 218, 0.03));
+      transform: translateX(-100%);
+      transition: transform 0.6s;
+    }
+
+    .skill-card:hover::before {
+      transform: translateX(0);
+    }
+
+    .skill-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px -20px var(--shadow);
+    }
+
+    .skill-icon {
+      font-size: 2rem;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    .skill-title {
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    /* 时间线 */
+    .timeline {
+      position: relative;
+      max-width: 800px;
+      margin: 3rem auto;
+    }
+
+    .timeline-item {
+      padding: 2rem;
+      background: var(--card-bg);
+      border-radius: 8px;
+      margin-bottom: 2rem;
+      position: relative;
+      opacity: 0;
+      transform: translateX(-50px);
+      transition: all 0.6s;
+    }
+
+    .timeline-item.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .timeline-date {
+      color: var(--accent);
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+
+    /* 联系表单 */
+    .contact-section {
+      text-align: center;
+      padding: 100px 0;
+    }
+
+    .contact-form {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      background: var(--card-bg);
+      border: 1px solid rgba(100, 255, 218, 0.1);
+      border-radius: 4px;
+      color: var(--text);
+      transition: all 0.3s;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(100, 255, 218, 0.1);
+    }
+
+    /* 主题切换按钮 */
+    .theme-toggle {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--card-bg);
+      border: none;
+      color: var(--accent);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: 0 5px 15px var(--shadow);
+      transition: all 0.3s;
+      z-index: 100;
+    }
+
+    .theme-toggle:hover {
+      transform: rotate(180deg);
+    }
+
+    @media (max-width: 768px) {
+      .title {
+        font-size: 3rem;
+      }
+
+      .timeline-item {
+        margin-left: 0;
+      }
+    }
+
+    /* 添加在其他样式表中 */
+    .avatar-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+
+    /* 可选：添加更多动画效果 */
+    .avatar {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      margin-bottom: 2rem;
+      border: 3px solid var(--accent);
+      box-shadow: 0 0 20px var(--shadow);
+      animation: float 3s ease-in-out infinite;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      justify-content: center;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* 可选：添加发光效果 */
+    .avatar::after {
+      content: '';
+      position: absolute;
+      top: -5px;
+      left: -5x;
+      right: -5px;
+      bottom: -5px;
+      border-radius: 50%;
+      background: linear-gradient(45deg, var(--accent), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: -1;
+    }
+
+    .avatar:hover::after {
+      opacity: 0.5;
+    }
+
+    /* 可选：点击效果 */
+    .avatar:active {
+      transform: scale(0.95);
+    }
+    .personal-info {
+  margin: 2rem 0;
+  color: var(--text-secondary);
+}
+
+.personal-info p {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0.5rem 0;
+  font-size: 1.1rem;
+}
+
+.info-icon {
+  font-style: normal;
+  color: var(--accent);
+}
+@keyframes pageLoad {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-content {
+  animation: pageLoad 1s ease-out;
+}
+
+  </style>
+</head>
+
+<body>
+  <nav>
+    <div class="container nav-content">
+      <a href="#" class="logo"> </a>
+      <button class="mobile-menu-btn">☰</button>
+      <div class="nav-links">
+        <a href="#heros" class="nav-link">关于</a>
+        <a href="#skills" class="nav-link">技能</a>
+        <a href="#experience" class="nav-link">经验</a>
+        <a href="#contact" class="nav-link">联系</a>
+      </div>
+    </div>
+  </nav>
+  <main>
+    <section id="heros" class="hero">
+      <div class="container">
+        <div class="hero-content">
+          <!-- 添加头像容器和头像 -->
+          <div class="avatar-container">
+            <img src="./头像.jpg" class="avatar">
+          </div>
+          <p class="subtitle">Welcome to my portfolio</p>
+          <h1 class="title">欢迎来到刘文昊的主页！</h1>
+  <div class="personal-info">
+    <p><i class="info-icon">👤</i> 年龄：25</p>
+    <p><i class="info-icon">📞</i> 电话：15271907645</p>
+    <p><i class="info-icon">📧</i> 邮箱：2500117040@qq.com</p>
+          <a href="#skills" class="cta-button">了解更多</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills" class="section">
+      <div class="container">
+        <h2 class="section-title">专业技能</h2>
+        <div class="skills-grid">
+          <div class="skill-card">
+            <h3 class="skill-title">半实物仿真</h3>
+            <p>
+              精通市场上常用半实物仿真软件（RTLab和RTDS），具有完整的建模逻辑思维能力。
+            </p>
+          </div>
+          <div class="skill-card">
+            <h3 class="skill-title">场站建模仿真</h3>
+            <p>
+              熟练使用机电仿真软件（PSASP）和电磁仿真软件（ADPSS,RTLab）进行场站建模并分析数据。
+            </p>
+          </div>
+          <div class="skill-card">
+            <h3 class="skill-title">脚本设计</h3>
+            <p>按照工作需求编写数据分析脚本，减轻重复性工作量。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="experience" class="section">
+      <div class="container">
+        <h2 class="section-title">工作经验</h2>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-date">2022.4 - 2024.3</div>
+            <h3>深圳市禾望电气股份有限公司</h3>
+            <h4>仿真研究工程师</h4>
+            <p>仿真平台、模型、工具、控制器的测试、维护、优化、升级制箱。</p>
+            <p>并网项目的高低穿、宽频阻抗特性的模型一致性校核。</p>
+            <p>按照工作需求使用编写分析工具，减轻重复性工作量。</p>
+            <p>协助建模验证、解决模型需求。</p>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-date">2024.3 - 至今</div>
+            <h3>武汉隆泰恒发工程技术有限公司</h3>
+            <h4>仿真软件工程师</h4>
+            <p></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="contact-section">
+      <div class="container">
+        <h2 class="section-title">联系我</h2>
+        <form id="contact-form" class="contact-form">
+          <input type="email" class="form-input" placeholder="您的邮箱" required />
+          <textarea class="form-input" rows="5" placeholder="留言内容" required></textarea>
+          <button type="submit" class="cta-button">发送消息</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <button class="theme-toggle">🌙</button>
+
+  <script>
+    // 主题切换
+    const themeToggle = document.querySelector(".theme-toggle");
+    const root = document.documentElement;
+    const icons = { dark: "🌙", light: "☀️" };
+
+    function toggleTheme() {
+      const currentTheme = root.getAttribute("data-theme");
+      const newTheme = currentTheme === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", newTheme);
+      themeToggle.textContent = icons[newTheme];
+      localStorage.setItem("theme", newTheme);
+    }
+
+    // 加载保存的主题
+    const savedTheme = localStorage.getItem("theme") || "dark";
+    root.setAttribute("data-theme", savedTheme);
+    themeToggle.textContent = icons[savedTheme];
+    themeToggle.addEventListener("click", toggleTheme);
+
+    // 导航栏滚动效果
+    window.addEventListener("scroll", () => {
+      const nav = document.querySelector("nav");
+      if (window.scrollY > 100) {
+        nav.classList.add("scrolled");
+      } else {
+        nav.classList.remove("scrolled");
+      }
+    });
+
+    // 移动端菜单
+    const mobileMenuBtn = document.querySelector(".mobile-menu-btn");
+    const navLinks = document.querySelector(".nav-links");
+
+    mobileMenuBtn.addEventListener("click", () => {
+      navLinks.classList.toggle("active");
+      mobileMenuBtn.textContent = navLinks.classList.contains("active")
+        ? "✕"
+        : "☰";
+    });
+
+    // 平滑滚动
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener("click", function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute("href"));
+        if (target) {
+          target.scrollIntoView({
+            behavior: "smooth",
+          });
+          // 关闭移动端菜单
+          navLinks.classList.remove("active");
+          mobileMenuBtn.textContent = "☰";
+        }
+      });
+    });
+
+    // 滚动动画
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+      }
+    );
+
+    document
+      .querySelectorAll(".timeline-item, .skill-card")
+      .forEach((item) => {
+        observer.observe(item);
+      });
+
+    // 表单提交
+    const contactForm = document.getElementById("contact-form");
+    contactForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(contactForm);
+
+      try {
+        // 这里添加你的表单处理逻辑
+        alert("消息已发送！");
+        contactForm.reset();
+      } catch (error) {
+        alert("发送失败，请稍后重试");
+      }
+    });
+  </script>
+</body>
+
+</html>
